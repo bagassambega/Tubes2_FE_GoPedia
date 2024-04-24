@@ -6,9 +6,9 @@ function App() {
   const [validWikiTitle1, setValidWikiTitle1] = useState()
   const [validWikiTitle2, setValidWikiTitle2] = useState()
   const [wikiPath, setwikiPath] = useState()
+  const [resultInfo, setresultInfo] = useState([])
 
-
-  function handleWikiSubmit(e){
+  async function handleWikiSubmit(e){
     e.preventDefault();
 
     const form = e.target;
@@ -17,12 +17,18 @@ function App() {
     const formJson = Object.fromEntries(formData.entries());
 
     let method = formJson.methodToggle? "IDS" : "BFS"
+    let source = await redirectSearch(formJson.source.split(` `).join(`+`))
+    let target = await redirectSearch(formJson.target.split(` `).join(`+`))
+    source = source.split(` `).join(`_`)
+    target = target.split(` `).join(`_`)
 
-    fetch(`http://localhost:8080/gopedia/?method=IDS&source=${formJson.source}&target=${formJson.target}`)
+    fetch(`http://localhost:8080/gopedia/?method=IDS&source=${source}&target=${target}`)
     .then((res) => res.json())
     .then((json) => {
       let thread = json.result.map((el) => <li key={el}>{el}</li>)
+      let resultInfo = [json.elapsedTime, json.length, json.numOfArticles]
       setwikiPath(thread)
+      setresultInfo(resultInfo)
     })
 
     let output = document.querySelector("#output")
@@ -51,6 +57,15 @@ function App() {
     hideWikiSuggest(id)
     let currentSearchBar = document.querySelector("#search" + id)
     currentSearchBar.value = title
+  }
+
+  async function redirectSearch(searchTerm){
+    const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&titles=${searchTerm}&redirects&format=json&origin=*`);
+    const json = await response.json();
+  
+    let goodSearch = json.query.redirects ? json.query.redirects[0].to : (json.query.normalized? json.query.normalized[0].to : searchTerm); //kalau return searchTerm, return error aja?
+    console.log(goodSearch);
+    return goodSearch;
   }
 
   return (
@@ -116,8 +131,11 @@ function App() {
           </div>
           
           {/*Output*/}
-          <ul id="output" className='bg-blue-500 hidden'>
-            <li>test</li>
+          <ul id="output" className='hidden bg-gray-600 text-white'>
+            <li>Results:</li>
+            <li>Elapsed Time: {resultInfo[0]}</li>
+            <li>Length: {resultInfo[1]}</li>
+            <li>Number of Articles: {resultInfo[2]}</li>
             {wikiPath}
           </ul>
         </form>
