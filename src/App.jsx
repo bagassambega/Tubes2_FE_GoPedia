@@ -46,7 +46,7 @@ function App() {
         {/*Algortihm Switch*/}
         <div className="flex rounded p-1 text-white mb-1">  
           <p className="text-gray-600 font-semibold text-lg">BFS</p>
-          <label htmlFor='method' className="mx-4 relative inline-flex items-center cursor-pointer">
+          <label htmlFor='methodToggle' className="mx-4 relative inline-flex items-center cursor-pointer">
             <input type="checkbox" onChange={() => setAlgorithm((!algorithm))}  className="sr-only peer" id="methodToggle" ></input>
             <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full 
             peer-checked:after:border-white after:content-[''] after:absolute after:top-[0.2rem] after:left-[2px] 
@@ -54,7 +54,7 @@ function App() {
             after:transition-all peer-checked:bg-green-500"></div>
           </label>
           <p className="text-green-500 font-semibold text-lg">IDS</p>
-          <input type="text" className='hidden' value={algorithm? "IDS" : "BFS"} name="currentMethod"></input>
+          <input type="text" className='hidden' value={algorithm? "IDS" : "BFS"} name="method"></input>
         </div>
 
         {/*Wikipedia Searchbox*/}
