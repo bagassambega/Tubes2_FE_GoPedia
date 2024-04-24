@@ -41,20 +41,20 @@ function App() {
       <h1 className="text-4xl flex items-center justify-center mb-10 font-bold"><bdi className='text-green-600'>Go</bdi>Pedia</h1>
 
       {/*Inputs*/}
-      <form className="flex flex-col space-y-5 items-center" action={algorithm? "IDS" : "BFS"
-      }>
+      <form className="flex flex-col space-y-5 items-center" action="/gopedia/">
 
         {/*Algortihm Switch*/}
         <div className="flex rounded p-1 text-white mb-1">  
           <p className="text-gray-600 font-semibold text-lg">BFS</p>
-          <label className="mx-4 relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" onChange={() => setAlgorithm((!algorithm))} className="sr-only peer" id="ColorTextureToggle" ></input>
+          <label htmlFor='method' className="mx-4 relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" onChange={() => setAlgorithm((!algorithm))}  className="sr-only peer" id="methodToggle" ></input>
             <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full 
             peer-checked:after:border-white after:content-[''] after:absolute after:top-[0.2rem] after:left-[2px] 
             after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
             after:transition-all peer-checked:bg-green-500"></div>
           </label>
           <p className="text-green-500 font-semibold text-lg">IDS</p>
+          <input type="text" className='hidden' value={algorithm? "IDS" : "BFS"} name="currentMethod"></input>
         </div>
 
         {/*Wikipedia Searchbox*/}
@@ -75,9 +75,9 @@ function App() {
           </div>
       
           <div className='flex flex-col'>
-            <label htmlFor="end" className='text-xl mb-2'>Web Wikipedia 2:</label>
+            <label htmlFor="target" className='text-xl mb-2'>Web Wikipedia 2:</label>
             <input className='bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
-            type="text" id="search2" name="end" required minLength="1" maxLength="40" size="10" onKeyUp={(event) => handleSearchChange(event.target.value, 2)}/>
+            type="text" id="search2" name="target" required minLength="1" maxLength="40" size="10" onKeyUp={(event) => handleSearchChange(event.target.value, 2)}/>
             <ul id = "wikiSuggester2" className="mb-5 w-full border-2 border-green-400 hidden">
               {validWikiTitle2}
             </ul>
