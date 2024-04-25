@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import goPediaLogo from './assets/GoPedia.png'
+import { Background } from './Background'
 
 function App() {
   //const [algorithm, setAlgorithm] = useState(false)
@@ -70,6 +71,7 @@ function App() {
 
   return (
     <>
+      <Background/>
       {/*Logo*/}
       <div className='flex items-center justify-center'>
         <img src={goPediaLogo} className="" alt="GoPedia logo" />
@@ -141,6 +143,8 @@ function App() {
         </form>
         
       </div>
+
+      
 
 
     </>
