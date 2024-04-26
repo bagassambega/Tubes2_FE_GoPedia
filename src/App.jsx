@@ -23,7 +23,7 @@ function App() {
     source = source.split(` `).join(`_`)
     target = target.split(` `).join(`_`)
 
-    fetch(`http://localhost:8080/gopedia/?method=IDS&source=${source}&target=${target}`)
+    fetch(`http://localhost:8080/gopedia/?method=${method}&source=${source}&target=${target}`)
     .then((res) => res.json())
     .then((json) => {
       let thread = json.result.map((el) => <li key={el}>{el}</li>)
