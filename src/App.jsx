@@ -15,6 +15,9 @@ function App() {
     let output = document.querySelector("#output")
     output.classList.add("hidden")
 
+    hideWikiSuggest(1)
+    hideWikiSuggest(2)
+
     setLoading(true)
 
     const form = e.target;
