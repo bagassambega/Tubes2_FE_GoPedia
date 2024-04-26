@@ -133,14 +133,13 @@ function App() {
           </div>
           
           {/*Output*/}
-          <ul id="output" className='hidden bg-gray-600 text-white'>
-            <li>Results:</li>
-            <li>Elapsed Time: {resultInfo[0]}</li>
-            <li>Length: {resultInfo[1]}</li>
-            <li>Number of Articles: {resultInfo[2]}</li>
+          <ul id="output" className='bg-gray-600 text-white text-xl'>
+            <li >Ditemukan jalur dengan menulusuri <bdi className='font-semibold'>{resultInfo[2]}</bdi> artikel 
+            sepanjang <bdi className='font-semibold'>{resultInfo[1] - 1}</bdi> jalur 
+            dalam waktu <bdi className='font-semibold'>{resultInfo[0]}</bdi>!</li>
             {wikiPath}
           </ul>
-        </form>
+        </form> 
         
       </div>
 
