@@ -109,7 +109,7 @@ function App() {
           <div className='flex flex-row space-x-12 text-lg'>
             <div className='flex flex-col'>
               <label htmlFor="source" className='text-xl  mb-2'>Web Wikipedia 1:</label>
-              <input className=' bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
+              <input autoComplete="off" className=' bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
               type="text" id="search1" name="source" required minLength="1" maxLength="40" size="10" onKeyUp={(event) => handleSearchChange(event.target.value, 1)} />
               <ul id = "wikiSuggester1" className="mb-5 w-full border-2 border-green-400 rounded overflow-auto max-h-96 hidden">
                 {validWikiTitle1}
@@ -124,7 +124,7 @@ function App() {
         
             <div className='flex flex-col'>
               <label htmlFor="target" className='text-xl mb-2'>Web Wikipedia 2:</label>
-              <input className='bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
+              <input autoComplete="off" className='bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
               type="text" id="search2" name="target" required minLength="1" maxLength="40" size="10" onKeyUp={(event) => handleSearchChange(event.target.value, 2)}/>
               <ul id = "wikiSuggester2" className="mb-5 w-full border-2 border-green-400 rounded overflow-auto max-h-96 hidden">
                 {validWikiTitle2}
