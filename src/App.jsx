@@ -1,16 +1,21 @@
 import { useState } from 'react'
 import goPediaLogo from './assets/GoPedia.png'
 import { Background } from './Background'
+import MoonLoader from "react-spinners/MoonLoader";
 
 function App() {
-  //const [algorithm, setAlgorithm] = useState(false)
   const [validWikiTitle1, setValidWikiTitle1] = useState()
   const [validWikiTitle2, setValidWikiTitle2] = useState()
   const [wikiPath, setwikiPath] = useState()
   const [resultInfo, setresultInfo] = useState([])
+  const [loading, setLoading] = useState(false);
 
   async function handleWikiSubmit(e){
     e.preventDefault();
+    let output = document.querySelector("#output")
+    output.classList.add("hidden")
+
+    setLoading(true)
 
     const form = e.target;
     const formData = new FormData(form);
@@ -22,17 +27,19 @@ function App() {
     let target = await redirectSearch(formJson.target.split(` `).join(`+`))
     source = source.split(` `).join(`_`)
     target = target.split(` `).join(`_`)
+    
+    const res = await fetch(`http://localhost:8080/gopedia/?method=${method}&source=${source}&target=${target}`)
+    const json = await res.json()
 
-    fetch(`http://localhost:8080/gopedia/?method=${method}&source=${source}&target=${target}`)
-    .then((res) => res.json())
-    .then((json) => {
-      let thread = json.result.map((el) => <li key={el}>{el}</li>)
-      let resultInfo = [json.elapsedTime, json.length, json.numOfArticles]
-      setwikiPath(thread)
-      setresultInfo(resultInfo)
-    })
+    let thread = json.result.map(
+      (el) => <a key={el} href={el} className='p-1 hover:bg-green-500 border-green-500 border-2' target="_blank">{el.slice(24)}</a>
+    )
+    let resultInfo = [json.elapsedTime, json.length, json.numOfArticles]
+    setwikiPath(thread)
+    setresultInfo(resultInfo)
 
-    let output = document.querySelector("#output")
+    setLoading(false)
+
     output.classList.remove("hidden")
   }
   
@@ -43,7 +50,7 @@ function App() {
     fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=${searchTerm}&origin=*`)
     .then((res) => res.json())
     .then((json) => {
-      let wikiEl = json[1].map((title) => <li onClick={() => changeSearch(title, id)} className='bg-white hover:bg-green-500 hover:text-white w-full hover:cursor-pointer' key={title}>{title}</li>)
+      let wikiEl = json[1].map((title) => <li onClick={() => changeSearch(title, id)} className='bg-white hover:bg-green-500 hover:text-white hover:cursor-pointer w-96 p-1' key={title}>{title}</li>)
       if (id == 1) setValidWikiTitle1(wikiEl);
       else setValidWikiTitle2(wikiEl);
     })
@@ -81,7 +88,7 @@ function App() {
       <h1 className="text-4xl flex items-center justify-center mb-10 font-bold"><bdi className='text-green-600'>Go</bdi>Pedia</h1>
 
       {/*Main*/}
-      <div>
+      <div className='flex flex-col space-y-5 items-center mb-10'>
 
         {/*Inputs*/}
         <form method="post" onSubmit={handleWikiSubmit} className="flex flex-col space-y-5 items-center">
@@ -104,7 +111,7 @@ function App() {
               <label htmlFor="source" className='text-xl  mb-2'>Web Wikipedia 1:</label>
               <input className=' bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
               type="text" id="search1" name="source" required minLength="1" maxLength="40" size="10" onKeyUp={(event) => handleSearchChange(event.target.value, 1)} />
-              <ul id = "wikiSuggester1" className="mb-5 w-full border-2 border-green-400 hidden">
+              <ul id = "wikiSuggester1" className="mb-5 w-full border-2 border-green-400 rounded overflow-auto max-h-96 hidden">
                 {validWikiTitle1}
               </ul>
             </div>
@@ -119,7 +126,7 @@ function App() {
               <label htmlFor="target" className='text-xl mb-2'>Web Wikipedia 2:</label>
               <input className='bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
               type="text" id="search2" name="target" required minLength="1" maxLength="40" size="10" onKeyUp={(event) => handleSearchChange(event.target.value, 2)}/>
-              <ul id = "wikiSuggester2" className="mb-5 w-full border-2 border-green-400 hidden">
+              <ul id = "wikiSuggester2" className="mb-5 w-full border-2 border-green-400 rounded overflow-auto max-h-96 hidden">
                 {validWikiTitle2}
               </ul>
             </div>
@@ -131,15 +138,26 @@ function App() {
               Search!
             </button>
           </div>
-          
-          {/*Output*/}
-          <ul id="output" className='bg-gray-600 text-white text-xl'>
-            <li >Ditemukan jalur dengan menulusuri <bdi className='font-semibold'>{resultInfo[2]}</bdi> artikel 
-            sepanjang <bdi className='font-semibold'>{resultInfo[1] - 1}</bdi> jalur 
-            dalam waktu <bdi className='font-semibold'>{resultInfo[0]}</bdi>!</li>
-            {wikiPath}
-          </ul>
+
         </form> 
+
+        <MoonLoader
+            color = "#22c55e"
+            loading = {loading}
+            size = {150}
+            aria-label="Loading Spinner"
+          />
+
+        {/*Output*/}
+        <div id="output" className='hidden flex flex-col items-center justify-center mb-10 text-xl bg-green-100 border-green-600 border-2 p-2 w-1/2'>
+          <p className='text-2xl mb-5'>Ditemukan jalur dengan menulusuri <bdi className='font-semibold'>{resultInfo[2]}</bdi> artikel 
+          sepanjang <bdi className='font-semibold'>{resultInfo[1]}</bdi> jalur 
+          dalam waktu <bdi className='font-semibold'>{resultInfo[0]}</bdi>!
+          </p>
+          <div className='flex flex-col mb-5 bg-gray-600 text-white font-semibold text-center w-2/5'>
+            {wikiPath}
+          </div>
+        </div>
         
       </div>
 
