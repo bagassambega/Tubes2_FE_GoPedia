@@ -98,7 +98,7 @@ function App() {
             <label htmlFor='methodToggle' className="mx-4 relative inline-flex items-center cursor-pointer">
               <input type="checkbox"  className="sr-only peer" id="methodToggle" name="methodToggle"></input>
               <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full 
-              peer-checked:after:border-white after:content-[''] after:absolute after:top-[0.2rem] after:left-[2px] 
+              peer-checked:after:border-white after:content-[''] after:absolute after:top-[0.25rem] after:left-[2.5px] 
               after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5
               after:transition-all peer-checked:bg-green-500"></div>
             </label>
