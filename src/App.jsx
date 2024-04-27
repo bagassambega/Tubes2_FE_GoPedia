@@ -3,12 +3,13 @@ import goPediaLogo from './assets/GoPedia.png'
 import { Background } from './Background'
 import MoonLoader from "react-spinners/MoonLoader";
 
-function App() {
+function Main() {
   const [validWikiTitle1, setValidWikiTitle1] = useState()
   const [validWikiTitle2, setValidWikiTitle2] = useState()
   const [wikiPath, setwikiPath] = useState()
   const [resultInfo, setresultInfo] = useState([])
   const [loading, setLoading] = useState(false);
+
 
   async function handleWikiSubmit(e){
     e.preventDefault();
@@ -81,10 +82,10 @@ function App() {
 
   return (
     <>
-      <Background/>
+      
       {/*Logo*/}
       <div className='flex items-center justify-center'>
-        <img src={goPediaLogo} className="" alt="GoPedia logo" />
+        <img src={goPediaLogo} className=" h-80" alt="GoPedia logo" />
       </div>
 
       {/*Title*/}
@@ -114,7 +115,7 @@ function App() {
               <label htmlFor="source" className='text-xl  mb-2'>Web Wikipedia 1:</label>
               <input autoComplete="off" className=' bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
               type="text" id="search1" name="source" required minLength="1" maxLength="40" size="10" onKeyUp={(event) => handleSearchChange(event.target.value, 1)} />
-              <ul id = "wikiSuggester1" className="mb-5 w-full border-2 border-green-400 rounded overflow-auto max-h-96 hidden">
+              <ul id = "wikiSuggester1" className="absolute top-[33.4rem] z-10 mb-5 w-[24rem] border-2 border-green-400 rounded overflow-y-auto overflow-x-hidden max-h-96 hidden">
                 {validWikiTitle1}
               </ul>
             </div>
@@ -129,7 +130,7 @@ function App() {
               <label htmlFor="target" className='text-xl mb-2'>Web Wikipedia 2:</label>
               <input autoComplete="off" className='bg-gray-200 appearance-none border-2 border-green-400 rounded w-96 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white'
               type="text" id="search2" name="target" required minLength="1" maxLength="40" size="10" onKeyUp={(event) => handleSearchChange(event.target.value, 2)}/>
-              <ul id = "wikiSuggester2" className="mb-5 w-full border-2 border-green-400 rounded overflow-auto max-h-96 hidden">
+              <ul id = "wikiSuggester2" className="absolute top-[33.4rem] z-10 mb-5 w-[24rem] border-2 border-green-400 rounded overflow-y-auto overflow-x-hidden max-h-96 hidden">
                 {validWikiTitle2}
               </ul>
             </div>
@@ -164,11 +165,14 @@ function App() {
         
       </div>
 
-      
-
-
     </>
   )
 }
 
-export default App
+function App() {
+  return(
+    <><Background/><Main/></>
+  );
+}
+
+export default App;

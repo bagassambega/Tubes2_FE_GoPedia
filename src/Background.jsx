@@ -101,7 +101,7 @@ export function Background () {
   if (init) {
     return (
       <Particles
-		className='fixed -z-10'
+				className='fixed -z-10'
         id="tsparticles"
         particlesLoaded={particlesLoaded}
         options={options}
@@ -109,5 +109,6 @@ export function Background () {
     );
   }
 
-  return <></>;
+  return <></>
+
 }
