@@ -42,12 +42,12 @@ function Main() {
 
     
     if (!sourceValidationJson[1].length){
-      setOutputHeader(<p className='text-2xl mb-5 text-center'><bdi className='font-semibold'>Error:</bdi> Web Wikipedia 1 <bdi className='font-semibold'>&quot;{source}&quot;</bdi> Tidak ditemukan. </p>)
+      setOutputHeader(<p className='text-2xl mb-5 text-center'><bdi className='font-semibold'>Error:</bdi> Web Wikipedia 1 &quot;<bdi className='font-semibold'>{source}</bdi>&quot; Tidak ditemukan. </p>)
       output.classList.remove("bg-green-100", "border-green-600")
       output.classList.add("bg-red-100", "border-red-600")
     }
     else if (!targetValidationJson[1].length){
-      setOutputHeader(<p className='text-2xl mb-5 text-center'><bdi className='font-semibold'>Error:</bdi> Web Wikipedia 2 <bdi className='font-semibold'>&quot;{target}&quot;</bdi> Tidak ditemukan. </p>)
+      setOutputHeader(<p className='text-2xl mb-5 text-center'><bdi className='font-semibold'>Error:</bdi> Web Wikipedia 2 &quot;<bdi className='font-semibold'>{target}</bdi>&quot; Tidak ditemukan. </p>)
       output.classList.remove("bg-green-100", "border-green-600")
       output.classList.add("bg-red-100", "border-red-600")
     }
