@@ -7,8 +7,8 @@ function Main() {
   const [validWikiTitle1, setValidWikiTitle1] = useState()
   const [validWikiTitle2, setValidWikiTitle2] = useState()
   const [wikiPath, setwikiPath] = useState()
-  const [resultInfo, setresultInfo] = useState([])
   const [loading, setLoading] = useState(false);
+  const [outputHeader, setOutputHeader] = useState();
 
 
   async function handleWikiSubmit(e){
@@ -31,19 +31,45 @@ function Main() {
     let target = await redirectSearch(formJson.target.split(` `).join(`+`))
     source = source.split(` `).join(`_`)
     target = target.split(` `).join(`_`)
+
+    const sourceValidation = await fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=${source}&origin=*`)
+    const sourceValidationJson = await sourceValidation.json()
+
+    const targetValidation = await fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&format=json&search=${target}&origin=*`)
+    const targetValidationJson = await targetValidation.json()
+
+    let thread = null;
+
     
-    const res = await fetch(`http://localhost:8080/gopedia/?method=${method}&source=${source}&target=${target}`)
-    const json = await res.json()
+    if (!sourceValidationJson[1].length){
+      setOutputHeader(<p className='text-2xl mb-5 text-center'><bdi className='font-semibold'>Error:</bdi> Web Wikipedia 1 <bdi className='font-semibold'>&quot;{source}&quot;</bdi> Tidak ditemukan. </p>)
+      output.classList.remove("bg-green-100", "border-green-600")
+      output.classList.add("bg-red-100", "border-red-600")
+    }
+    else if (!targetValidationJson[1].length){
+      setOutputHeader(<p className='text-2xl mb-5 text-center'><bdi className='font-semibold'>Error:</bdi> Web Wikipedia 2 <bdi className='font-semibold'>&quot;{target}&quot;</bdi> Tidak ditemukan. </p>)
+      output.classList.remove("bg-green-100", "border-green-600")
+      output.classList.add("bg-red-100", "border-red-600")
+    }
+    else{
+      output.classList.remove("bg-red-100", "border-red-600")
+      output.classList.add("bg-green-100", "border-green-600")
+      
+      const res = await fetch(`http://localhost:8080/gopedia/?method=${method}&source=${source}&target=${target}`)
+      const json = await res.json()
+  
+      thread = json.result.map(
+        (el) => <a key={el} href={el} className='p-1 hover:bg-green-500 border-green-500 border-2' target="_blank">{el.slice(24)}</a>
+      )
 
-    let thread = json.result.map(
-      (el) => <a key={el} href={el} className='p-1 hover:bg-green-500 border-green-500 border-2' target="_blank">{el.slice(24)}</a>
-    )
-    let resultInfo = [json.elapsedTime, json.length, json.numOfArticles]
+      setOutputHeader(<p className='text-2xl mb-5 text-center'>Ditemukan jalur dengan menulusuri <bdi className='font-semibold'>{json.numOfArticles}</bdi> artikel 
+      sepanjang <bdi className='font-semibold'>{json.length}</bdi> jalur 
+      dalam waktu <bdi className='font-semibold'>{json.elapsedTime}</bdi>!
+      </p>)
+    }
+
     setwikiPath(thread)
-    setresultInfo(resultInfo)
-
     setLoading(false)
-
     output.classList.remove("hidden")
   }
   
@@ -153,11 +179,8 @@ function Main() {
           />
 
         {/*Output*/}
-        <div id="output" className='hidden flex flex-col items-center justify-center mb-10 text-xl bg-green-100 border-green-600 border-2 p-2 w-1/2'>
-          <p className='text-2xl mb-5'>Ditemukan jalur dengan menulusuri <bdi className='font-semibold'>{resultInfo[2]}</bdi> artikel 
-          sepanjang <bdi className='font-semibold'>{resultInfo[1]}</bdi> jalur 
-          dalam waktu <bdi className='font-semibold'>{resultInfo[0]}</bdi>!
-          </p>
+        <div id="output" className='hidden flex flex-col items-center justify-center mb-10 text-xl border-2 p-2 w-1/2'>
+          {outputHeader}
           <div className='flex flex-col mb-5 bg-gray-600 text-white font-semibold text-center w-2/5'>
             {wikiPath}
           </div>
